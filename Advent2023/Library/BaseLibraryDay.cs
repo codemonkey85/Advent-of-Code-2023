@@ -2,8 +2,6 @@
 
 public abstract class BaseLibraryDay : BaseDay
 {
-    protected override string ClassPrefix => "Day";
-
     protected override string InputFileDirPath =>
         Path.Combine(
             Path.GetDirectoryName(Assembly.GetEntryAssembly()!.Location)!,
