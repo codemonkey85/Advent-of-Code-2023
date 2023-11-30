@@ -23,22 +23,35 @@
 
 @if (Solutions is { Count: > 0 })
 {
-    <MudStack Row="@false">
+    <MudGrid Spacing="3"
+             Justify="@Justify.FlexStart"
+             Class="ma-1 pa-1">
         @foreach (var solution in Solutions)
         {
-            <MudPaper>
-                <MudStack Row="@false">
-                    <MudText>
-                        Day @solution.Day
-                    </MudText>
-                    <MudText>
-                        Solution to Part One: @solution.Part1
-                    </MudText>
-                    <MudText>
-                        Solution to Part Two: @solution.Part2
-                    </MudText>
-                </MudStack>
-            </MudPaper>
+            <MudItem>
+                @SolutionFragment(solution)
+            </MudItem>
         }
-    </MudStack>
+    </MudGrid>
+}
+
+@code {
+    private static RenderFragment SolutionFragment(Solution solution) =>
+    @<MudCard>
+        <MudCardHeader>
+            <MudText Typo="@Typo.h6">
+                Day @solution.Day
+            </MudText>
+        </MudCardHeader>
+        <MudCardContent>
+            <MudStack Row="@false">
+                <MudText Typo="@Typo.body1">
+                    Solution to Part One: @solution.Part1
+                </MudText>
+                <MudText Typo="@Typo.body1">
+                    Solution to Part Two: @solution.Part2
+                </MudText>
+            </MudStack>
+        </MudCardContent>
+    </MudCard>;
 }
