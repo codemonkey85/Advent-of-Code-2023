@@ -3,12 +3,10 @@ namespace Advent2023.Library;
 
 public class Day01 : BaseLibraryDay
 {
-    private string _input;
+    private readonly string _input;
 
-    public Day01()
-    {
+    public Day01() =>
         _input = File.ReadAllText(InputFilePath);
-    }
 
     public override ValueTask<string> Solve_1()
     {
@@ -75,7 +73,7 @@ public class Day01 : BaseLibraryDay
         What is the sum of all of the calibration values?
         */
 
-        List<(string Word, string Digit)> digits = [
+        List<(string WordString, string DigitString)> digits = [
             ("one", "1"),
             ("two", "2"),
             ("three", "3"),
@@ -98,20 +96,20 @@ public class Day01 : BaseLibraryDay
 
             Dictionary<int, int?> digitDictionary = [];
 
-            foreach (var (Word, Digit) in digits)
+            foreach (var (WordString, DigitString) in digits)
             {
-                if (!int.TryParse(Digit, out var digit))
+                if (!int.TryParse(DigitString, out var digitValue))
                 {
                     throw new Exception("Digit is not a number");
                 }
 
-                var indexOfWord = line.IndexOf(Word);
-                var indexOfDigit = line.IndexOf(Digit);
+                var indexOfWord = line.IndexOf(WordString);
+                var indexOfDigit = line.IndexOf(DigitString);
                 var digitIndices = new List<int> { indexOfWord, indexOfDigit };
 
                 if (digitIndices.All(index => index == -1))
                 {
-                    digitDictionary.Add(digit, -1);
+                    digitDictionary.Add(digitValue, -1);
                     continue;
                 }
 
@@ -119,35 +117,44 @@ public class Day01 : BaseLibraryDay
                     .Where(index => index != -1)
                     .Min();
 
-                digitDictionary.Add(digit, digitIndex);
+                digitDictionary.Add(digitValue, digitIndex);
             }
 
             var firstDigit = digitDictionary
                 .Where(digit => digit.Value is not null and not -1)
-                .OrderBy(digit => digit.Value)
-                .First().Key.ToString();
+                .MinBy(digit => digit.Value)
+                .Key.ToString();
 
             digitDictionary.Clear();
 
-            foreach (var (Word, Digit) in digits)
+            foreach (var (WordString, DigitString) in digits)
             {
-                if (!int.TryParse(Digit, out var digit))
+                if (!int.TryParse(DigitString, out var digitValue))
                 {
                     throw new Exception("Digit is not a number");
                 }
 
-                var indexOfWord = line.LastIndexOf(Word);
-                var indexOfDigit = line.LastIndexOf(Digit);
-                var digitIndex = new List<int> { indexOfWord, indexOfDigit }
+                var indexOfWord = line.LastIndexOf(WordString);
+                var indexOfDigit = line.LastIndexOf(DigitString);
+                var digitIndices = new List<int> { indexOfWord, indexOfDigit };
+
+                if (digitIndices.All(index => index == -1))
+                {
+                    digitDictionary.Add(digitValue, -1);
+                    continue;
+                }
+
+                var digitIndex = digitIndices
+                    .Where(index => index != -1)
                     .Max();
 
-                digitDictionary.Add(digit, digitIndex);
+                digitDictionary.Add(digitValue, digitIndex);
             }
 
             var lastDigit = digitDictionary
                 .Where(digit => digit.Value is not null and not -1)
-                .OrderByDescending(digit => digit.Value)
-                .First().Key.ToString();
+                .MaxBy(digit => digit.Value)
+                .Key.ToString();
 
             var numberString = firstDigit + lastDigit;
 
