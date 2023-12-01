@@ -52,6 +52,21 @@ public class Day01 : BaseLibraryDay
 
     public override ValueTask<string> Solve_2()
     {
-        return new("");
+        List<int> numbers = [];
+        foreach (var line in _input.Split("\n"))
+        {
+            if (line is not { Length: > 0 })
+            {
+                continue;
+            }
+
+            var numberString = string.Empty;
+
+            if (int.TryParse(numberString, out var number))
+            {
+                numbers.Add(number);
+            }
+        }
+        return new(numbers.Sum().ToString());
     }
 }
