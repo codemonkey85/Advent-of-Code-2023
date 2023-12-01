@@ -94,8 +94,8 @@ public class Day01 : BaseLibraryDay
                 continue;
             }
 
-            Dictionary<int, int?> firstDigitDictionary = [];
-            Dictionary<int, int?> lastDigitDictionary = [];
+            Dictionary<int, int> firstDigitDictionary = [];
+            Dictionary<int, int> lastDigitDictionary = [];
 
             foreach (var (WordString, DigitString) in digits)
             {
@@ -140,12 +140,12 @@ public class Day01 : BaseLibraryDay
             }
 
             var firstDigit = firstDigitDictionary
-                .Where(digit => digit.Value is not null and not -1)
+                .Where(digit => digit.Value is not -1)
                 .MinBy(digit => digit.Value)
                 .Key.ToString();
 
             var lastDigit = lastDigitDictionary
-                .Where(digit => digit.Value is not null and not -1)
+                .Where(digit => digit.Value is not -1)
                 .MaxBy(digit => digit.Value)
                 .Key.ToString();
 
