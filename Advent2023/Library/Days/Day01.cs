@@ -75,7 +75,20 @@ public class Day01 : BaseLibraryDay
         What is the sum of all of the calibration values?
         */
 
+        List<(string Word, string Digit)> digits = [
+            ("one", "1"),
+            ("two", "2"),
+            ("three", "3"),
+            ("four", "4"),
+            ("five", "5"),
+            ("six", "6"),
+            ("seven", "7"),
+            ("eight", "8"),
+            ("nine", "9"),
+        ];
+
         List<int> numbers = [];
+
         foreach (var line in _input.Split("\n"))
         {
             if (line is not { Length: > 0 })
@@ -83,12 +96,72 @@ public class Day01 : BaseLibraryDay
                 continue;
             }
 
-            var numberString = string.Empty;
+            Dictionary<int, int?> digitDictionary = [];
 
-            if (int.TryParse(numberString, out var number))
+            foreach (var (Word, Digit) in digits)
             {
-                numbers.Add(number);
+                if (!int.TryParse(Digit, out var digit))
+                {
+                    throw new Exception("Digit is not a number");
+                }
+
+                var indexOfWord = line.IndexOf(Word);
+                var indexOfDigit = line.IndexOf(Digit);
+                var digitIndices = new List<int> { indexOfWord, indexOfDigit };
+
+                if (digitIndices.All(index => index == -1))
+                {
+                    digitDictionary.Add(digit, -1);
+                    continue;
+                }
+
+                var digitIndex = digitIndices
+                    .Where(index => index != -1)
+                    .Min();
+
+                digitDictionary.Add(digit, digitIndex);
             }
+
+            var firstDigit = digitDictionary
+                .Where(digit => digit.Value is not null and not -1)
+                .OrderBy(digit => digit.Value)
+                .First().Key.ToString();
+
+            digitDictionary.Clear();
+
+            foreach (var (Word, Digit) in digits)
+            {
+                if (!int.TryParse(Digit, out var digit))
+                {
+                    throw new Exception("Digit is not a number");
+                }
+
+                var indexOfWord = line.LastIndexOf(Word);
+                var indexOfDigit = line.LastIndexOf(Digit);
+                var digitIndex = new List<int> { indexOfWord, indexOfDigit }
+                    .Max();
+
+                digitDictionary.Add(digit, digitIndex);
+            }
+
+            var lastDigit = digitDictionary
+                .Where(digit => digit.Value is not null and not -1)
+                .OrderByDescending(digit => digit.Value)
+                .First().Key.ToString();
+
+            var numberString = firstDigit + lastDigit;
+
+            if (!int.TryParse(numberString, out var number))
+            {
+                throw new Exception("Number is not a number");
+            }
+
+            if (number < 0)
+            {
+                throw new Exception("Number is negative");
+            }
+
+            numbers.Add(number);
         }
         return new(numbers.Sum().ToString());
     }
