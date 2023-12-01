@@ -94,7 +94,8 @@ public class Day01 : BaseLibraryDay
                 continue;
             }
 
-            Dictionary<int, int?> digitDictionary = [];
+            Dictionary<int, int?> firstDigitDictionary = [];
+            Dictionary<int, int?> lastDigitDictionary = [];
 
             foreach (var (WordString, DigitString) in digits)
             {
@@ -103,55 +104,45 @@ public class Day01 : BaseLibraryDay
                     throw new Exception("Digit is not a number");
                 }
 
-                var indexOfWord = line.IndexOf(WordString);
-                var indexOfDigit = line.IndexOf(DigitString);
-                var digitIndices = new List<int> { indexOfWord, indexOfDigit };
+                var firstIndexOfWord = line.IndexOf(WordString);
+                var firstIndexOfDigit = line.IndexOf(DigitString);
+                var firstDigitIndices = new List<int> { firstIndexOfWord, firstIndexOfDigit };
 
-                if (digitIndices.All(index => index == -1))
+                if (firstDigitIndices.All(index => index == -1))
                 {
-                    digitDictionary.Add(digitValue, -1);
+                    firstDigitDictionary.Add(digitValue, -1);
                     continue;
                 }
 
-                var digitIndex = digitIndices
+                var firstDigitIndex = firstDigitIndices
                     .Where(index => index != -1)
                     .Min();
 
-                digitDictionary.Add(digitValue, digitIndex);
+                firstDigitDictionary.Add(digitValue, firstDigitIndex);
+
+                var lastIndexOfWord = line.LastIndexOf(WordString);
+                var lastIndexOfDigit = line.LastIndexOf(DigitString);
+                var lastDigitIndices = new List<int> { lastIndexOfWord, lastIndexOfDigit };
+
+                if (lastDigitIndices.All(index => index == -1))
+                {
+                    lastDigitDictionary.Add(digitValue, -1);
+                    continue;
+                }
+
+                var lastDigitIndex = lastDigitIndices
+                    .Where(index => index != -1)
+                    .Max();
+
+                lastDigitDictionary.Add(digitValue, lastDigitIndex);
             }
 
-            var firstDigit = digitDictionary
+            var firstDigit = firstDigitDictionary
                 .Where(digit => digit.Value is not null and not -1)
                 .MinBy(digit => digit.Value)
                 .Key.ToString();
 
-            digitDictionary.Clear();
-
-            foreach (var (WordString, DigitString) in digits)
-            {
-                if (!int.TryParse(DigitString, out var digitValue))
-                {
-                    throw new Exception("Digit is not a number");
-                }
-
-                var indexOfWord = line.LastIndexOf(WordString);
-                var indexOfDigit = line.LastIndexOf(DigitString);
-                var digitIndices = new List<int> { indexOfWord, indexOfDigit };
-
-                if (digitIndices.All(index => index == -1))
-                {
-                    digitDictionary.Add(digitValue, -1);
-                    continue;
-                }
-
-                var digitIndex = digitIndices
-                    .Where(index => index != -1)
-                    .Max();
-
-                digitDictionary.Add(digitValue, digitIndex);
-            }
-
-            var lastDigit = digitDictionary
+            var lastDigit = lastDigitDictionary
                 .Where(digit => digit.Value is not null and not -1)
                 .MaxBy(digit => digit.Value)
                 .Key.ToString();
