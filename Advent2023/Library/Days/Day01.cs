@@ -108,14 +108,14 @@ public class Day01 : BaseLibraryDay
                 var firstIndexOfDigit = line.IndexOf(DigitString);
                 var firstDigitIndices = new List<int> { firstIndexOfWord, firstIndexOfDigit };
 
-                if (firstDigitIndices.All(index => index == -1))
+                if (firstDigitIndices.All(index => index is -1))
                 {
                     firstDigitDictionary.Add(digitValue, -1);
                 }
                 else
                 {
                     var firstDigitIndex = firstDigitIndices
-                        .Where(index => index != -1)
+                        .Where(index => index is not -1)
                         .Min();
 
                     firstDigitDictionary.Add(digitValue, firstDigitIndex);
@@ -125,14 +125,14 @@ public class Day01 : BaseLibraryDay
                 var lastIndexOfDigit = line.LastIndexOf(DigitString);
                 var lastDigitIndices = new List<int> { lastIndexOfWord, lastIndexOfDigit };
 
-                if (lastDigitIndices.All(index => index == -1))
+                if (lastDigitIndices.All(index => index is -1))
                 {
                     lastDigitDictionary.Add(digitValue, -1);
                 }
                 else
                 {
                     var lastDigitIndex = lastDigitIndices
-                        .Where(index => index != -1)
+                        .Where(index => index is not -1)
                         .Max();
 
                     lastDigitDictionary.Add(digitValue, lastDigitIndex);
