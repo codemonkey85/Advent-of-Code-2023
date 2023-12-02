@@ -9,12 +9,24 @@ public class Day02 : BaseLibraryDay
     public Day02() =>
         _input = File.ReadAllText(InputFilePath);
 
+    const string red = "red";
+    const string green = "green";
+    const string blue = "blue";
+
     public override ValueTask<string> Solve_1()
     {
-        const string red = "red";
-        const string green = "green";
-        const string blue = "blue";
+        var gamesResults = GetGameResults(_input);
 
+        var gameIds = gamesResults
+            .Where(game => game.Value.IsPossible)
+            .Select(game => game.Key);
+
+        return new(gameIds.Sum().ToString());
+    }
+
+    private Dictionary<int, (List<List<SelectionColor>> Pulls, bool IsPossible)>
+        GetGameResults(string input)
+    {
         const int maxRed = 12;
         const int maxGreen = 13;
         const int maxBlue = 14;
@@ -28,7 +40,7 @@ public class Day02 : BaseLibraryDay
 
         Dictionary<int, (List<List<SelectionColor>> Pulls, bool IsPossible)> gamesResults = [];
 
-        var games = _input.Split("\n");
+        var games = input.Split("\n");
         foreach (var game in games.Where(g => g is { Length: > 0 }))
         {
             var gameStrings = game.Split(':').Select(gs => gs.Trim());
@@ -86,11 +98,7 @@ public class Day02 : BaseLibraryDay
             gamesResults.Add(gameNumber, (gameResults, isGamePossible));
         }
 
-        var gameIds = gamesResults
-            .Where(game => game.Value.IsPossible)
-            .Select(game => game.Key);
-
-        return new(gameIds.Sum().ToString());
+        return gamesResults;
     }
 
     public override ValueTask<string> Solve_2()
@@ -130,6 +138,19 @@ public class Day02 : BaseLibraryDay
         For each game, find the minimum set of cubes that must have been present. What is
         the sum of the power of these sets?
         */
+
+        var testInput = """
+            Game 1: 3 blue, 4 red; 1 red, 2 green, 6 blue; 2 green
+            Game 2: 1 blue, 2 green; 3 green, 4 blue, 1 red; 1 green, 1 blue
+            Game 3: 8 green, 6 blue, 20 red; 5 blue, 4 red, 13 green; 5 green, 1 red
+            Game 4: 1 green, 3 red, 6 blue; 3 green, 6 red; 3 green, 15 blue, 14 red
+            Game 5: 6 red, 1 blue, 3 green; 2 blue, 1 red, 2 green
+            """;
+
+        var gamesResults = GetGameResults(testInput);
+
+
+
         return new();
     }
 }
