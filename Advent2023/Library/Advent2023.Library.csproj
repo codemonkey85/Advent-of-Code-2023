@@ -14,9 +14,4 @@
 		<None Include="Inputs\**" CopyToOutputDirectory="PreserveNewest" />
 	</ItemGroup>
 
-	<ItemGroup>
-		<Folder Include="Days\" />
-		<Folder Include="Inputs\" />
-	</ItemGroup>
-
 </Project>

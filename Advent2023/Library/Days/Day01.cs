@@ -1,5 +1,4 @@
-﻿
-namespace Advent2023.Library;
+﻿namespace Advent2023.Library;
 
 public class Day01 : BaseLibraryDay
 {
