@@ -62,6 +62,47 @@ public class Day03 : BaseLibraryDay
         larger. What is the sum of all of the part
         numbers in the engine schematic?
         */
+
+        var lines = testInput
+            .Replace("\r\n", "\n")
+            .Split('\n')
+            .Where(line => line.Trim() is { Length: > 0 })
+            .ToList()!;
+
+        for (var lineNum = 0; lineNum < lines.Count; lineNum++)
+        {
+            if (lineNum is 0)
+            {
+                var theseLines = lines[0..2]!;
+                var line1 = theseLines[0]!;
+                var line2 = theseLines[1]!;
+
+                List<int> line1NumIndices = [];
+                List<int> line2NumIndices = [];
+
+                for (var charNum = 0; charNum < line1.Length; charNum++)
+                {
+                    if (char.IsNumber(line1[charNum]))
+                    {
+                        line1NumIndices.Add(charNum);
+                    }
+                }
+            }
+            else if (lineNum == lines.Count - 1)
+            {
+                var theseLines = lines[^2..]!;
+                var line1 = theseLines[0]!;
+                var line2 = theseLines[1]!;
+            }
+            else
+            {
+                var theseLines = lines[(lineNum - 1)..(lineNum + 2)]!;
+                var line1 = theseLines[0]!;
+                var line2 = theseLines[1]!;
+                var line3 = theseLines[2]!;
+            }
+        }
+
         return new();
     }
 
