@@ -1,5 +1,6 @@
 ﻿namespace Advent2023.Library;
 
+// https://adventofcode.com/2023/day/1
 public class Day01 : BaseLibraryDay
 {
     private readonly string _input;
