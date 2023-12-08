@@ -10,9 +10,9 @@ public class Day02 : BaseLibraryDay
     public Day02() =>
         _input = File.ReadAllText(InputFilePath);
 
-    const string red = "red";
-    const string green = "green";
-    const string blue = "blue";
+    private const string red = "red";
+    private const string green = "green";
+    private const string blue = "blue";
 
     public override ValueTask<string> Solve_1()
     {
