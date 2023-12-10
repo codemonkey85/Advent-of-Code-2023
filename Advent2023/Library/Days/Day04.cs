@@ -65,7 +65,7 @@ public class Day04 : BaseLibraryDay
 
     public override ValueTask<string> Solve_2()
     {
-        var cardsDictionary = GetCards(testInput);
+        var cardsDictionary = GetCards(_input);
         List<Card> allCards = [];
 
         foreach (var (key, card) in cardsDictionary)
@@ -77,8 +77,8 @@ public class Day04 : BaseLibraryDay
                 continue;
             }
 
-            //var moreCards = GetMoreCards(cardsDictionary, key, card);
-            //allCards.AddRange(moreCards);
+            var moreCards = GetMoreCards(cardsDictionary, key, card);
+            allCards.AddRange(moreCards);
         }
 
         return new(allCards.Count.ToString());
@@ -90,7 +90,7 @@ public class Day04 : BaseLibraryDay
         {
             List<Card> results = [];
 
-            for (var index = 0; index < card.TotalMatchingNumbers; index++)
+            for (var index = 1; index <= card.TotalMatchingNumbers; index++)
             {
                 var newKey = key + index;
                 if (!cardsDictionary.TryGetValue(newKey, out var newCard))
@@ -98,8 +98,8 @@ public class Day04 : BaseLibraryDay
                     throw new Exception("Card not found");
                 }
                 results.Add(newCard);
-                //var moreCards = GetMoreCards(cardsDictionary, newKey, newCard);
-                //results.AddRange(moreCards);
+                var moreCards = GetMoreCards(cardsDictionary, newKey, newCard);
+                results.AddRange(moreCards);
             }
 
             return results;
