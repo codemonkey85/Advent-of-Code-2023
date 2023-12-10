@@ -5,7 +5,7 @@ public class Day03 : BaseLibraryDay
 {
     private readonly string _input;
 
-    private readonly string testInput = """
+    private const string testInput = """
         467..114..
         ...*......
         ..35..633.

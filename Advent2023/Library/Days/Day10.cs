@@ -5,6 +5,14 @@ public class Day10 : BaseLibraryDay
 {
     private readonly string _input;
 
+    private const string testInput = """
+        .....
+        .S-7.
+        .|.|.
+        .L-J.
+        .....
+        """;
+
     public Day10() =>
         _input = File.ReadAllText(InputFilePath);
 
