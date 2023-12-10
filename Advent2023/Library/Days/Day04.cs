@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace Advent2023.Library.Days;
+﻿namespace Advent2023.Library.Days;
 
 // https://adventofcode.com/2023/day/4
 public class Day04 : BaseLibraryDay
@@ -59,42 +57,52 @@ public class Day04 : BaseLibraryDay
 
     public override ValueTask<string> Solve_1()
     {
-        var cards = GetCards(_input)
+        var cardsDictionary = GetCards(_input)
             .Select(kvp => kvp.Value);
 
-        return new(cards.Sum(c => c.TotalPoints).ToString());
+        return new(cardsDictionary.Sum(c => c.TotalPoints).ToString());
     }
 
     public override ValueTask<string> Solve_2()
     {
-        var cards = GetCards(testInput);
-
+        var cardsDictionary = GetCards(testInput);
         List<Card> allCards = [];
-        foreach (var (key, card) in cards)
+
+        foreach (var (key, card) in cardsDictionary)
         {
-            allCards.AddRange(EvaluateCard(cards, key));
+            allCards.Add(card);
+
+            if (card.TotalMatchingNumbers == 0)
+            {
+                continue;
+            }
+
+            //var moreCards = GetMoreCards(cardsDictionary, key, card);
+            //allCards.AddRange(moreCards);
         }
 
         return new(allCards.Count.ToString());
 
-        static List<Card> EvaluateCard(Dictionary<int, Card> cardsDictionary, int key)
+        static List<Card> GetMoreCards(
+            Dictionary<int, Card> cardsDictionary,
+            int key,
+            Card card)
         {
-            var card = cardsDictionary[key];
-            List<Card> returnedCards = [card];
-            var totalMatchingNumbers = card.TotalMatchingNumbers;
+            List<Card> results = [];
 
-            for (var i = 0; i < totalMatchingNumbers; i++)
+            for (var index = 0; index < card.TotalMatchingNumbers; index++)
             {
-                //returnedCards.AddRange(EvaluateCard(cardsDictionary, key + i));
-                if (!cardsDictionary.TryGetValue(key + i, out var result))
+                var newKey = key + index;
+                if (!cardsDictionary.TryGetValue(newKey, out var newCard))
                 {
-                    throw new Exception("Can't find card");
+                    throw new Exception("Card not found");
                 }
-
-                returnedCards.Add(result);
+                results.Add(newCard);
+                //var moreCards = GetMoreCards(cardsDictionary, newKey, newCard);
+                //results.AddRange(moreCards);
             }
 
-            return returnedCards;
+            return results;
         }
     }
 
@@ -131,5 +139,9 @@ public class Day04 : BaseLibraryDay
                     ? 0
                     : MyNumbers
             .Count(n => WinningNumbers.Contains(n));
+
+        public override string ToString() =>
+            $"{nameof(CardNum)}: {CardNum}, " +
+            $"{nameof(TotalMatchingNumbers)}: {TotalMatchingNumbers}, ";
     }
 }
