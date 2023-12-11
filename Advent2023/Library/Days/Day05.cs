@@ -44,20 +44,36 @@ public class Day05 : BaseLibraryDay
     public Day05() =>
         _input = File.ReadAllText(InputFilePath);
 
-    private static void ProcessInput(string input)
+    private static RangeMapGroup ProcessInput(string input)
     {
         var localInput = input.Replace("\n\r", "\n").Trim();
         var groups = localInput.Split("\n\n").Select(g => g.Trim()).ToList() ?? [];
 
         var seedsString = groups[0].Replace("seeds: ", string.Empty, StringComparison.OrdinalIgnoreCase).Trim();
 
-        var seedsToSoilLines = GetRangeMaps(CleanGroup(groups[1]));
-        var soilToFertilizerLines = GetRangeMaps(CleanGroup(groups[2]));
-        var fertilizerToWaterLines = GetRangeMaps(CleanGroup(groups[3]));
-        var waterToLightLines = GetRangeMaps(CleanGroup(groups[4]));
-        var lightToTemperatureLines = GetRangeMaps(CleanGroup(groups[5]));
-        var temperatureToHumidityLines = GetRangeMaps(CleanGroup(groups[6]));
-        var humidityToLocationLines = GetRangeMaps(CleanGroup(groups[7]));
+        var seedStrings = seedsString.Split(" ");
+        List<int> seeds = [];
+
+        foreach (var seedString in seedStrings)
+        {
+            if (!int.TryParse(seedString, out var seed))
+            {
+                continue;
+            }
+            seeds.Add(seed);
+        }
+
+        return new RangeMapGroup
+        {
+            Seeds = seeds,
+            SeedsToSoil = GetRangeMaps(CleanGroup(groups[1])),
+            SoilToFertilizer = GetRangeMaps(CleanGroup(groups[2])),
+            FertilizerToWater = GetRangeMaps(CleanGroup(groups[3])),
+            WaterToLight = GetRangeMaps(CleanGroup(groups[4])),
+            LightToTemperature = GetRangeMaps(CleanGroup(groups[5])),
+            TemperatureToHumidity = GetRangeMaps(CleanGroup(groups[6])),
+            HumidityToLocation = GetRangeMaps(CleanGroup(groups[7])),
+        };
 
         static List<string> CleanGroup(string group) => group
             .Split('\n')
@@ -104,7 +120,7 @@ public class Day05 : BaseLibraryDay
 
     public override ValueTask<string> Solve_1()
     {
-        ProcessInput(testInput);
+        var rangeMapGroup = ProcessInput(testInput);
 
         return new();
     }
@@ -122,5 +138,24 @@ public class Day05 : BaseLibraryDay
         public Range DestinationRange => new(DestinationRangeStart, DestinationRangeStart + RangeLength);
 
         public Range SourceRange => new(SourceRangeStart, SourceRangeStart + RangeLength);
+    }
+
+    private class RangeMapGroup()
+    {
+        public List<int> Seeds { get; set; } = [];
+
+        public List<RangeMap> SeedsToSoil { get; set; } = [];
+
+        public List<RangeMap> SoilToFertilizer { get; set; } = [];
+
+        public List<RangeMap> FertilizerToWater { get; set; } = [];
+
+        public List<RangeMap> WaterToLight { get; set; } = [];
+
+        public List<RangeMap> LightToTemperature { get; set; } = [];
+
+        public List<RangeMap> TemperatureToHumidity { get; set; } = [];
+
+        public List<RangeMap> HumidityToLocation { get; set; } = [];
     }
 }
