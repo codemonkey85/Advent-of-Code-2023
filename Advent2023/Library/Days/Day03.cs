@@ -107,5 +107,8 @@ public class Day03 : BaseLibraryDay
         return new();
     }
 
-    public override ValueTask<string> Solve_2() => new();
+    public override ValueTask<string> Solve_2()
+    {
+        return new();
+    }
 }

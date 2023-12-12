@@ -125,7 +125,10 @@ public class Day05 : BaseLibraryDay
         return new();
     }
 
-    public override ValueTask<string> Solve_2() => new();
+    public override ValueTask<string> Solve_2()
+    {
+        return new();
+    }
 
     private class RangeMap(int destinationRangeStart, int sourceRangeStart, int rangeLength)
     {
