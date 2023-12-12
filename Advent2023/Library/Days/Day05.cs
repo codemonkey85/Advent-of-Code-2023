@@ -52,11 +52,11 @@ public class Day05 : BaseLibraryDay
         var seedsString = groups[0].Replace("seeds: ", string.Empty, StringComparison.OrdinalIgnoreCase).Trim();
 
         var seedStrings = seedsString.Split(" ");
-        List<int> seeds = [];
+        List<long> seeds = [];
 
         foreach (var seedString in seedStrings)
         {
-            if (!int.TryParse(seedString, out var seed))
+            if (!long.TryParse(seedString, out var seed))
             {
                 continue;
             }
@@ -94,19 +94,19 @@ public class Day05 : BaseLibraryDay
                 }
 
                 var destinationRangeStartString = numStrings[0];
-                if (!int.TryParse(destinationRangeStartString, out var destinationRangeStart))
+                if (!long.TryParse(destinationRangeStartString, out var destinationRangeStart))
                 {
                     throw new Exception("Can't parse number");
                 }
 
                 var sourceRangeStartString = numStrings[1];
-                if (!int.TryParse(sourceRangeStartString, out var sourceRangeStart))
+                if (!long.TryParse(sourceRangeStartString, out var sourceRangeStart))
                 {
                     throw new Exception("Can't parse number");
                 }
 
                 var rangeLengthString = numStrings[2];
-                if (!int.TryParse(rangeLengthString, out var rangeLength))
+                if (!long.TryParse(rangeLengthString, out var rangeLength))
                 {
                     throw new Exception("Can't parse number");
                 }
@@ -120,32 +120,72 @@ public class Day05 : BaseLibraryDay
 
     public override ValueTask<string> Solve_1()
     {
+        var rangeMapGroup = ProcessInput(_input);
+        List<long> locations = [];
+
+        foreach (var seed in rangeMapGroup.Seeds)
+        {
+            var seedLocation = GetLocationFromSeed(rangeMapGroup, seed);
+            locations.Add(seedLocation);
+        }
+
+        return new(locations.Min().ToString());
+    }
+
+    public override ValueTask<string> Solve_2()
+    {
         var rangeMapGroup = ProcessInput(testInput);
 
         return new();
     }
 
-    public override ValueTask<string> Solve_2()
+    private static long GetLocationFromSeed(RangeMapGroup rangeMapGroup, long seedNum)
     {
-        return new();
+        var seed = rangeMapGroup.Seeds.FirstOrDefault(s => s == seedNum);
+        if (seed == 0)
+        {
+            throw new Exception("Invalid seed");
+        }
+
+        var soil = GetMappedThing(rangeMapGroup.SeedsToSoil, seed);
+        var fertilizer = GetMappedThing(rangeMapGroup.SoilToFertilizer, soil);
+        var water = GetMappedThing(rangeMapGroup.FertilizerToWater, fertilizer);
+        var light = GetMappedThing(rangeMapGroup.WaterToLight, water);
+        var temperature = GetMappedThing(rangeMapGroup.LightToTemperature, light);
+        var humidity = GetMappedThing(rangeMapGroup.TemperatureToHumidity, temperature);
+        var location = GetMappedThing(rangeMapGroup.HumidityToLocation, humidity);
+
+        return location;
     }
 
-    private class RangeMap(int destinationRangeStart, int sourceRangeStart, int rangeLength)
+    private static long GetMappedThing(List<RangeMap> destinationRange, long sourceId)
     {
-        public int DestinationRangeStart { get; } = destinationRangeStart;
+        foreach (var rangeMap in destinationRange)
+        {
+            for (var i = 0; i < rangeMap.RangeLength; i++)
+            {
+                if (rangeMap.SourceRangeStart + i == sourceId)
+                {
+                    return rangeMap.DestinationRangeStart + i;
+                }
+            }
+        }
 
-        public int SourceRangeStart { get; } = sourceRangeStart;
+        return sourceId;
+    }
 
-        public int RangeLength { get; } = rangeLength;
+    private class RangeMap(long destinationRangeStart, long sourceRangeStart, long rangeLength)
+    {
+        public long DestinationRangeStart { get; } = destinationRangeStart;
 
-        public Range DestinationRange => new(DestinationRangeStart, DestinationRangeStart + RangeLength);
+        public long SourceRangeStart { get; } = sourceRangeStart;
 
-        public Range SourceRange => new(SourceRangeStart, SourceRangeStart + RangeLength);
+        public long RangeLength { get; } = rangeLength;
     }
 
     private class RangeMapGroup()
     {
-        public List<int> Seeds { get; set; } = [];
+        public List<long> Seeds { get; set; } = [];
 
         public List<RangeMap> SeedsToSoil { get; set; } = [];
 
