@@ -19,14 +19,14 @@ public sealed class Day04 : BaseLibraryDay
     public Day04() =>
         input = File.ReadAllText(InputFilePath);
 
-    private Dictionary<int, Card> GetCards(string input)
+    private static Dictionary<int, Card> GetCards(string input)
     {
         Dictionary<int, Card> cards = [];
         var localInput = input.Replace("\n\r", "\n");
-        var lines = localInput.Split('\n') ?? [];
+        var lines = localInput.Split('\n');
         foreach (var line in lines.Select(l => l.Trim()).Where(l => !string.IsNullOrEmpty(l)))
         {
-            var cardLineSplit = line.Split(':').Select(l => l.Trim()).ToList() ?? [];
+            var cardLineSplit = line.Split(':').Select(l => l.Trim()).ToList();
             var cardNumString = cardLineSplit[0].Replace("Card", string.Empty, StringComparison.OrdinalIgnoreCase).Trim();
 
             if (!int.TryParse(cardNumString, out var cardNum))
@@ -34,9 +34,9 @@ public sealed class Day04 : BaseLibraryDay
                 throw new Exception("Can't parse card number");
             }
 
-            var cardNumberStrings = cardLineSplit[1].Split('|').Select(c => c.Trim()).ToList() ?? [];
-            var winningNumbers = ConvertNumStringsToNumList(cardNumberStrings[0]) ?? [];
-            var myNumbers = ConvertNumStringsToNumList(cardNumberStrings[1]) ?? [];
+            var cardNumberStrings = cardLineSplit[1].Split('|').Select(c => c.Trim()).ToList();
+            var winningNumbers = ConvertNumStringsToNumList(cardNumberStrings[0]);
+            var myNumbers = ConvertNumStringsToNumList(cardNumberStrings[1]);
 
             cards.Add(cardNum, new Card
             {
@@ -108,13 +108,13 @@ public sealed class Day04 : BaseLibraryDay
         }
     }
 
-    private class Card()
+    private class Card
     {
-        public int CardNum { get; set; }
+        public int CardNum { get; init; }
 
-        public List<int> WinningNumbers { get; set; } = [];
+        public List<int> WinningNumbers { get; init; } = [];
 
-        public List<int> MyNumbers { get; set; } = [];
+        public List<int> MyNumbers { get; init; } = [];
 
         public int TotalPoints
         {

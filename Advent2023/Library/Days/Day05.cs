@@ -49,7 +49,7 @@ public sealed class Day05 : BaseLibraryDay
     private static RangeMapGroup ProcessInput(string input)
     {
         var localInput = input.Replace("\n\r", "\n").Trim();
-        var groups = localInput.Split("\n\n").Select(g => g.Trim()).ToList() ?? [];
+        var groups = localInput.Split("\n\n").Select(g => g.Trim()).ToList();
 
         var seedsString = groups[0].Replace("seeds: ", string.Empty, StringComparison.OrdinalIgnoreCase).Trim();
 
@@ -185,22 +185,22 @@ public sealed class Day05 : BaseLibraryDay
         public long RangeLength { get; } = rangeLength;
     }
 
-    private class RangeMapGroup()
+    private class RangeMapGroup
     {
-        public List<long> Seeds { get; set; } = [];
+        public List<long> Seeds { get; init; } = [];
 
-        public List<RangeMap> SeedsToSoil { get; set; } = [];
+        public List<RangeMap> SeedsToSoil { get; init; } = [];
 
-        public List<RangeMap> SoilToFertilizer { get; set; } = [];
+        public List<RangeMap> SoilToFertilizer { get; init; } = [];
 
-        public List<RangeMap> FertilizerToWater { get; set; } = [];
+        public List<RangeMap> FertilizerToWater { get; init; } = [];
 
-        public List<RangeMap> WaterToLight { get; set; } = [];
+        public List<RangeMap> WaterToLight { get; init; } = [];
 
-        public List<RangeMap> LightToTemperature { get; set; } = [];
+        public List<RangeMap> LightToTemperature { get; init; } = [];
 
-        public List<RangeMap> TemperatureToHumidity { get; set; } = [];
+        public List<RangeMap> TemperatureToHumidity { get; init; } = [];
 
-        public List<RangeMap> HumidityToLocation { get; set; } = [];
+        public List<RangeMap> HumidityToLocation { get; init; } = [];
     }
 }

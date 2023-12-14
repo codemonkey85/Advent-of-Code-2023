@@ -70,15 +70,15 @@ public sealed class Day03 : BaseLibraryDay
             .Replace("\r\n", "\n")
             .Split('\n')
             .Where(line => line.Trim() is { Length: > 0 })
-            .ToList()!;
+            .ToList();
 
         for (var lineNum = 0; lineNum < lines.Count; lineNum++)
         {
             if (lineNum is 0)
             {
-                var theseLines = lines[0..2]!;
-                var line1 = theseLines[0]!;
-                var line2 = theseLines[1]!;
+                var theseLines = lines[..2];
+                var line1 = theseLines[0];
+                var line2 = theseLines[1];
 
                 List<int> line1NumIndices = [];
                 List<int> line2NumIndices = [];
@@ -93,16 +93,16 @@ public sealed class Day03 : BaseLibraryDay
             }
             else if (lineNum == lines.Count - 1)
             {
-                var theseLines = lines[^2..]!;
-                var line1 = theseLines[0]!;
-                var line2 = theseLines[1]!;
+                var theseLines = lines[^2..];
+                var line1 = theseLines[0];
+                var line2 = theseLines[1];
             }
             else
             {
-                var theseLines = lines[(lineNum - 1)..(lineNum + 2)]!;
-                var line1 = theseLines[0]!;
-                var line2 = theseLines[1]!;
-                var line3 = theseLines[2]!;
+                var theseLines = lines[(lineNum - 1)..(lineNum + 2)];
+                var line1 = theseLines[0];
+                var line2 = theseLines[1];
+                var line3 = theseLines[2];
             }
         }
 
