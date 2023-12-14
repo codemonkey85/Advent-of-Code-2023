@@ -1,20 +1,22 @@
 ﻿namespace Advent2023.Library.Days;
 
 // https://adventofcode.com/2023/day/10
-public class Day10 : BaseLibraryDay
+// ReSharper disable once UnusedType.Global
+public sealed class Day10 : BaseLibraryDay
 {
-    private readonly string _input;
+    private readonly string input;
 
-    private const string testInput = """
-        .....
-        .S-7.
-        .|.|.
-        .L-J.
-        .....
-        """;
+    // ReSharper disable once UnusedMember.Local
+    private const string TestInput = """
+                                     .....
+                                     .S-7.
+                                     .|.|.
+                                     .L-J.
+                                     .....
+                                     """;
 
     public Day10() =>
-        _input = File.ReadAllText(InputFilePath);
+        input = File.ReadAllText(InputFilePath);
 
     public override ValueTask<string> Solve_1()
     {

@@ -1,24 +1,26 @@
-﻿namespace Advent2023.Library;
+﻿namespace Advent2023.Library.Days;
 
 // https://adventofcode.com/2023/day/1
-public class Day01 : BaseLibraryDay
+// ReSharper disable once UnusedType.Global
+public sealed class Day01 : BaseLibraryDay
 {
-    private readonly string _input;
+    private readonly string input;
 
-    private const string testInput = """
-        1abc2
-        pqr3stu8vwx
-        a1b2c3d4e5f
-        treb7uchet
-        """;
+    // ReSharper disable once UnusedMember.Local
+    private const string TestInput = """
+                                     1abc2
+                                     pqr3stu8vwx
+                                     a1b2c3d4e5f
+                                     treb7uchet
+                                     """;
 
     public Day01() =>
-        _input = File.ReadAllText(InputFilePath);
+        input = File.ReadAllText(InputFilePath);
 
     public override ValueTask<string> Solve_1()
     {
         List<int> numbers = [];
-        foreach (var line in _input.Split("\n"))
+        foreach (var line in input.Split("\n"))
         {
             if (line is not { Length: > 0 })
             {
@@ -27,24 +29,22 @@ public class Day01 : BaseLibraryDay
 
             var numberString = string.Empty;
 
-            for (var i = 0; i < line.Length; i++)
+            foreach (var c in line.Where(char.IsNumber))
             {
-                var c = line[i];
-                if (char.IsNumber(c))
-                {
-                    numberString += c;
-                    break;
-                }
+                numberString += c;
+                break;
             }
 
             for (var i = line.Length - 1; i >= 0; i--)
             {
                 var c = line[i];
-                if (char.IsNumber(c))
+                if (!char.IsNumber(c))
                 {
-                    numberString += c;
-                    break;
+                    continue;
                 }
+
+                numberString += c;
+                break;
             }
 
             if (int.TryParse(numberString, out var number))
@@ -52,12 +52,14 @@ public class Day01 : BaseLibraryDay
                 numbers.Add(number);
             }
         }
+
         return new(numbers.Sum().ToString());
     }
 
     public override ValueTask<string> Solve_2()
     {
-        List<(string WordString, string DigitString)> digits = [
+        List<(string WordString, string DigitString)> digits =
+        [
             ("one", "1"),
             ("two", "2"),
             ("three", "3"),
@@ -71,7 +73,7 @@ public class Day01 : BaseLibraryDay
 
         List<int> numbers = [];
 
-        foreach (var line in _input.Split("\n"))
+        foreach (var line in input.Split("\n"))
         {
             if (line is not { Length: > 0 })
             {
@@ -81,15 +83,15 @@ public class Day01 : BaseLibraryDay
             Dictionary<int, int> firstDigitDictionary = [];
             Dictionary<int, int> lastDigitDictionary = [];
 
-            foreach (var (WordString, DigitString) in digits)
+            foreach (var (wordString, digitString) in digits)
             {
-                if (!int.TryParse(DigitString, out var digitValue))
+                if (!int.TryParse(digitString, out var digitValue))
                 {
                     throw new Exception("Digit is not a number");
                 }
 
-                var firstIndexOfWord = line.IndexOf(WordString);
-                var firstIndexOfDigit = line.IndexOf(DigitString);
+                var firstIndexOfWord = line.IndexOf(wordString, StringComparison.Ordinal);
+                var firstIndexOfDigit = line.IndexOf(digitString, StringComparison.Ordinal);
                 var firstDigitIndices = new List<int> { firstIndexOfWord, firstIndexOfDigit };
 
                 if (firstDigitIndices.All(index => index is -1))
@@ -105,8 +107,8 @@ public class Day01 : BaseLibraryDay
                     firstDigitDictionary.Add(digitValue, firstDigitIndex);
                 }
 
-                var lastIndexOfWord = line.LastIndexOf(WordString);
-                var lastIndexOfDigit = line.LastIndexOf(DigitString);
+                var lastIndexOfWord = line.LastIndexOf(wordString, StringComparison.Ordinal);
+                var lastIndexOfDigit = line.LastIndexOf(digitString, StringComparison.Ordinal);
                 var lastDigitIndices = new List<int> { lastIndexOfWord, lastIndexOfDigit };
 
                 if (lastDigitIndices.All(index => index is -1))
@@ -147,6 +149,7 @@ public class Day01 : BaseLibraryDay
 
             numbers.Add(number);
         }
+
         return new(numbers.Sum().ToString());
     }
 }

@@ -1,25 +1,27 @@
 ﻿namespace Advent2023.Library.Days;
 
 // https://adventofcode.com/2023/day/3
-public class Day03 : BaseLibraryDay
+// ReSharper disable once UnusedType.Global
+public sealed class Day03 : BaseLibraryDay
 {
-    private readonly string _input;
+    private readonly string input;
 
-    private const string testInput = """
-        467..114..
-        ...*......
-        ..35..633.
-        ......#...
-        617*......
-        .....+.58.
-        ..592.....
-        ......755.
-        ...$.*....
-        .664.598..
-        """;
+    // ReSharper disable once UnusedMember.Local
+    private const string TestInput = """
+                                     467..114..
+                                     ...*......
+                                     ..35..633.
+                                     ......#...
+                                     617*......
+                                     .....+.58.
+                                     ..592.....
+                                     ......755.
+                                     ...$.*....
+                                     .664.598..
+                                     """;
 
     public Day03() =>
-        _input = File.ReadAllText(InputFilePath);
+        input = File.ReadAllText(InputFilePath);
 
     public override ValueTask<string> Solve_1()
     {
@@ -64,7 +66,7 @@ public class Day03 : BaseLibraryDay
         numbers in the engine schematic?
         */
 
-        var lines = testInput
+        var lines = TestInput
             .Replace("\r\n", "\n")
             .Split('\n')
             .Where(line => line.Trim() is { Length: > 0 })
